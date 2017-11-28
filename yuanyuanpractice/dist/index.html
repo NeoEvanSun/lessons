@@ -2,9 +2,30 @@
   <html>
     <head>
       <meta charset="utf-8">
+      <script src="https://unpkg.com/vue"></script>
       <title></title>
     </head>
     <body>
-      index.html
+
+      <div id="app">
+        <p>{{ message }}</p>
+        <button v-on:click="messageplus">点我+1</button>
+        <input v-model="enterStr" type="text" placeholder="hello"/>
+      </div>
+
     </body>
+    <script>
+      var app = new Vue({
+        el:"#app",
+        data:{
+          message:'123',
+          enterStr:"abc"
+        },
+        methods:{
+          messageplus:function(){
+            this.enterStr = this.enterStr.split('').reverse().join('');
+          }
+        }
+      });
+    </script>
   </html>
