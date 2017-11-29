@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+
+    <div id="root">
+      <item-list v-for="dataList in dataLists" :imagefiles="dataList"/>
+    </div>
+
+  </body>
+  <script type="text/javascript">
+
+    Vue.component('item',{
+      props:['imagefile'],
+      template:'<div class="itemCompontent"><div class="desc">{{imagefile.desc}}</div><div class="flo">{{imagefile.flower}}朵花</div></div>',
+
+    })
+
+    Vue.component('item-list',{
+      props:['imagefiles'],
+      template:'<div class="itemlist"><item v-for="item in imagefiles" v-bind:imagefile="item" v-bind:key="item.flower"></item></div>'
+    })
+
+    var app = new Vue({
+      el:"#root",
+      data:{
+        dataLists:[
+            [{
+              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
+              desc:'描述1',
+              flower:'1'
+            },{
+              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
+              desc:'描述2',
+              flower:'2'
+            },{
+              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
+              desc:'描述3',
+              flower:'3'
+            }],
+            [{
+              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
+              desc:'描述1',
+              flower:'5'
+            },{
+              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
+              desc:'描述2',
+              flower:'6'
+            },{
+              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
+              desc:'描述3',
+              flower:'7'
+            }]
+        ]
+      },
+    })
+  </script>
+</html>
