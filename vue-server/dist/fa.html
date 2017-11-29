@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="https://unpkg.com/vue">
+
+    </script>
+  </head>
+  <body>
+    <div id = "root">
+      <parents ></parents>
+    </div>
+
+  </body>
+  <script type="text/javascript">
+  Vue.component('child',{
+    props:['kidData'],
+    template:'<li>{{kidData.name}}<button v-on:click="noticeP(kidData.name)"></button></li>',
+    methods:{
+      noticeP:function(name){
+        this.$emit('noticeMessage',name);
+      }
+    },
+    mounted:function(){
+      console.log('mounted');
+    },
+    updated:function(){
+      console.log('updated');
+    }
+  })
+  Vue.component('parents',{
+    data:function(){
+      return {
+        kidsData:[{
+          name:'lisa',
+          age:12,
+        },{
+          name:'flora',
+          age:14,
+        }]
+      }
+    },
+    template:'<div><ul><child v-on:noticeMessage="methodName" v-for = "kidData in kidsData" v-bind:kidData="kidData"></child></ul> <button v-on:click="updateName">改变name</button></div>',
+    methods:{
+      methodName:function(name){
+        alert(name);
+      },
+    updateName:function(){
+      this.kidsData[0].name="mark"; 
+    }
+    }
+
+  })
+  var app = new Vue({
+    el:'#root'
+  })
+
+  </script>
+</html>

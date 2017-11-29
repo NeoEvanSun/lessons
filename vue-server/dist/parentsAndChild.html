@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>父子组件通讯</title>
+    <script type="text/javascript" src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <div id = "root">
+      <parents></parents>
+    </div>
+    <script type="text/javascript">
+      Vue.component('parents',{
+        template:'<div><p>{{message}}</p><button v-on:click="changeKidsName">给孩子改个名</button><p>i am a father,i have lots of children</p><ol><child v-on:messagefromkids="executeMessage" v-for="child in childnames" v-bind:child="child"></child></ol></div>',
+        data:function(){
+          return {
+            childnames:[{name:'lily'},{name:'lucy'},{name:'tom'}],
+            message:""
+          }
+        },
+        methods:{
+          executeMessage:function(data){
+            console.log(data);
+            this.message = data.name + ":" +data.message;
+          },
+          changeKidsName:function(){
+            this.childnames[0].name = "qiqi"
+            console.log(this.childnames);
+          }
+        }
+      })
+      Vue.component('child',{
+        props:['child'],
+        template:'<li>{{child.name}}<button v-on:click="tellFather(child.name)">我想要个弟弟</button></li>',
+        methods:{
+          tellFather:function(name){
+            this.$emit('messagefromkids',{name:name,message:'我想要个弟弟'})
+            console.log('send');
+          }
+        }
+      })
+      var app =  new Vue ({
+        el:'#root'
+      })
+    </script>
+  </body>
+</html>

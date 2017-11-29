@@ -8,55 +8,59 @@
   <body>
 
     <div id="root">
-      <item-list v-for="dataList in dataLists" :imagefiles="dataList"/>
+      <lifecircle v-if="destoryState"></lifecircle>
+      <button v-on:click="showit">显示</button>
+      <button v-on:click="hideit">隐藏</button>
     </div>
 
   </body>
   <script type="text/javascript">
-
-    Vue.component('item',{
-      props:['imagefile'],
-      template:'<div class="itemCompontent"><div class="desc">{{imagefile.desc}}</div><div class="flo">{{imagefile.flower}}朵花</div></div>',
-
-    })
-
-    Vue.component('item-list',{
-      props:['imagefiles'],
-      template:'<div class="itemlist"><item v-for="item in imagefiles" v-bind:imagefile="item" v-bind:key="item.flower"></item></div>'
-    })
-
-    var app = new Vue({
-      el:"#root",
-      data:{
-        dataLists:[
-            [{
-              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
-              desc:'描述1',
-              flower:'1'
-            },{
-              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
-              desc:'描述2',
-              flower:'2'
-            },{
-              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
-              desc:'描述3',
-              flower:'3'
-            }],
-            [{
-              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
-              desc:'描述1',
-              flower:'5'
-            },{
-              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
-              desc:'描述2',
-              flower:'6'
-            },{
-              imgUrl:'http://img05.tooopen.com/images/20150128/sy_79896567561.jpg',
-              desc:'描述3',
-              flower:'7'
-            }]
-        ]
+    Vue.component('lifecircle',{
+      template:'<div>{{labelText}}<button v-on:click="changeMyself">改变自己</button></div>',
+      data:function(){
+        return {
+          labelText:"生命周期测试"
+        }
       },
+      methods:{
+        changeMyself:function(){
+          this.labelText = "我改变了自己";
+        }
+      },
+      beforeCreate:function(){
+        console.log('beforeCreate');
+      },
+      created:function(){
+        console.log('created');
+      },
+      beforeMount:function(){
+        console.log('beforeMount');
+      },
+      mounted:function(){
+        console.log('mounted');
+        this.labelText ='change';
+      },
+      beforeUpdate:function(){
+        console.log('i will update')
+      },
+      updated:function(){
+        console.log('i have been updated');
+      }
+    })
+
+    var app =  new Vue({
+      el:'#root',
+      data:{
+        destoryState:true
+      },
+      methods:{
+        showit:function(){
+          this.destoryState = true;
+        },
+        hideit:function(){
+          this.destoryState = false;
+        }
+      }
     })
   </script>
 </html>
