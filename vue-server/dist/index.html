@@ -8,57 +8,70 @@
   <body>
 
     <div id="root">
-      <lifecircle v-if="destoryState"></lifecircle>
-      <button v-on:click="showit">显示</button>
-      <button v-on:click="hideit">隐藏</button>
+      <span v-for="dom in isSearchDomData" :key="dom.id">
+        <input type="radio"  :id="dom.id" :value="dom.value" v-model="isSearch"/>
+        <label for="dom.id">{{dom.title}}</label>
+      </span>
+      <br/>
+      <span v-for="dom in searchEngTypeDomData" :key="dom.id" v-if="isSearch==1">
+        <input type="radio"  :id="dom.id" :value="dom.value" v-model="searchEngType"/>
+        <label for="dom.id">{{dom.title}}</label>
+      </span>
     </div>
 
   </body>
   <script type="text/javascript">
-    Vue.component('lifecircle',{
-      template:'<div>{{labelText}}<button v-on:click="changeMyself">改变自己</button></div>',
-      data:function(){
-        return {
-          labelText:"生命周期测试"
-        }
-      },
-      methods:{
-        changeMyself:function(){
-          this.labelText = "我改变了自己";
-        }
-      },
-      beforeCreate:function(){
-        console.log('beforeCreate');
-      },
-      created:function(){
-        console.log('created');
-      },
-      beforeMount:function(){
-        console.log('beforeMount');
-      },
-      mounted:function(){
-        console.log('mounted');
-        this.labelText ='change';
-      },
-      beforeUpdate:function(){
-        console.log('i will update')
-      },
-      updated:function(){
-        console.log('i have been updated');
-      }
-    })
-
-    var app =  new Vue({
-      el:'#root',
+    var app = new Vue({
+      el:"#root",
       data:{
-        destoryState:true
+        channelName:'',
+        ruleCount:'',
+        /*是否搜索引擎*/
+        isSearch:'2',
+        /*如果是搜索引擎,搜索引擎的类型*/
+        searchEngType:'',
+
+        /*dom节点数据*/
+        isSearchDomData:[
+          {
+            title:"搜索引擎",
+            value:"1",
+            id:"isSearch1"
+          },
+          {
+            title:"非搜索引擎",
+            value:"2",
+            id:"isSearch2",
+          }
+        ],
+
+        searchEngTypeDomData:[
+          {
+            title:"百度",
+            value:"1",
+            id:"searchEng1"
+          },
+          {
+            title:"神玛",
+            value:"2",
+            id:"searchEng2"
+          },
+          {
+            title:"搜狗",
+            value:"3",
+            id:"searchEng3"
+          },
+        ]
+
       },
-      methods:{
-        showit:function(){
-          this.destoryState = true;
-        },
-        hideit:function(){
-          this.destoryState = false;
+      watch:{
+        isSearch:function(newVal,oldVal){
+          if(newVal == "2"){
+            this.searchEngType = ""
+          }else if(newVal == "1"){
+            this.searchEngType = "2"
+          }
+          console.log("现在搜索引擎值为"+this.searchEngType);
         }
       }
     })
