@@ -4,76 +4,71 @@
     <meta charset="utf-8">
     <title></title>
     <script type="text/javascript" src="https://unpkg.com/vue"></script>
+    <script type="text/javascript" src="https://unpkg.com/vuex"></script>
   </head>
   <body>
-
     <div id="root">
-      <span v-for="dom in isSearchDomData" :key="dom.id">
-        <input type="radio"  :id="dom.id" :value="dom.value" v-model="isSearch"/>
-        <label for="dom.id">{{dom.title}}</label>
-      </span>
-      <br/>
-      <span v-for="dom in searchEngTypeDomData" :key="dom.id" v-if="isSearch==1">
-        <input type="radio"  :id="dom.id" :value="dom.value" v-model="searchEngType"/>
-        <label for="dom.id">{{dom.title}}</label>
-      </span>
     </div>
-
   </body>
   <script type="text/javascript">
-    var app = new Vue({
-      el:"#root",
-      data:{
-        channelName:'',
-        ruleCount:'',
-        /*是否搜索引擎*/
-        isSearch:'2',
-        /*如果是搜索引擎,搜索引擎的类型*/
-        searchEngType:'',
-
-        /*dom节点数据*/
-        isSearchDomData:[
-          {
-            title:"搜索引擎",
-            value:"1",
-            id:"isSearch1"
-          },
-          {
-            title:"非搜索引擎",
-            value:"2",
-            id:"isSearch2",
-          }
-        ],
-
-        searchEngTypeDomData:[
-          {
-            title:"百度",
-            value:"1",
-            id:"searchEng1"
-          },
-          {
-            title:"神玛",
-            value:"2",
-            id:"searchEng2"
-          },
-          {
-            title:"搜狗",
-            value:"3",
-            id:"searchEng3"
-          },
-        ]
-
+    Vue.use(Vuex);
+    var store = new Vuex.Store({
+      state:{
+        count:2
       },
-      watch:{
-        isSearch:function(newVal,oldVal){
-          if(newVal == "2"){
-            this.searchEngType = ""
-          }else if(newVal == "1"){
-            this.searchEngType = "2"
-          }
-          console.log("现在搜索引擎值为"+this.searchEngType);
+      mutations:{
+        add(state){
+          state.count++;
+        }
+      },
+      actions:{
+        addAync(context){
+          setTimeout(()=>{
+            context.commit('add');
+          },2000)
         }
       }
     })
+
+    var child = {
+      template:`<div>{{count}}<button @click="addOne">点我+1</button></div>`,
+      computed:{
+        count(){
+          return this.$store.state.count
+        }
+      },
+      methods:{
+        addOne(){
+          this.$store.commit('add');
+        }
+      }
+    }
+
+    var bro = {
+      template:`<div>我是你哥 {{count2}} <button @click="addOne">点我两秒加1</button></div>`,
+      computed:{
+        count2(){
+          return this.$store.state.count
+        }
+      },
+      methods:{
+        addOne(){
+          console.log('in')
+          this.$store.dispatch('addAync');
+        }
+      }
+    }
+
+
+    var app = new Vue({
+      el:"#root",
+      store,
+      components:{
+        component1:child,
+        bro
+      },
+      template:`<div class="app"><component1></component1><bro></bro></div>`
+    })
+
   </script>
 </html>
